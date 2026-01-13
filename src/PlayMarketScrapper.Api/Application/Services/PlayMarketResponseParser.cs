@@ -7,15 +7,17 @@ public partial class PlayMarketResponseParser : IPlayMarketResponseParser
 {
     public IReadOnlyList<string> ExtractPackages(string rawResponse)
     {
-        var normalized = Normalize(rawResponse);
+        if (string.IsNullOrWhiteSpace(rawResponse))
+            return Array.Empty<string>();
+
+        var s = StripTransportJunk(rawResponse);
 
         var result = new List<string>();
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (Match m in PackageEntryRegex().Matches(normalized))
+        foreach (Match m in PackageEntryRegex().Matches(s))
         {
             var pkg = m.Groups["pkg"].Value;
-            
             if (seen.Add(pkg))
                 result.Add(pkg);
         }
@@ -25,7 +27,13 @@ public partial class PlayMarketResponseParser : IPlayMarketResponseParser
 
     public string? ExtractToken(string rawResponse)
     {
-        var s = Normalize(rawResponse);
+        if (string.IsNullOrWhiteSpace(rawResponse))
+            return null;
+
+        var s = StripTransportJunk(rawResponse);
+
+        s = s.Replace("\\u003d", "=", StringComparison.Ordinal)
+             .Replace("\\u0026", "&", StringComparison.Ordinal);
 
         return TokenRegex().Matches(s)
             .Select(m => m.Groups["token"].Value)
@@ -33,27 +41,19 @@ public partial class PlayMarketResponseParser : IPlayMarketResponseParser
             .FirstOrDefault();
     }
 
-    private static string Normalize(string raw)
+    private static string StripTransportJunk(string raw)
     {
-        if (string.IsNullOrWhiteSpace(raw))
-            return string.Empty;
-
         raw = raw.Replace(")]}'", "", StringComparison.Ordinal);
 
         raw = DigitsOnlyLineRegex().Replace(raw, "");
 
-        raw = raw.Replace("\\\"", "\"", StringComparison.Ordinal);
-
-        raw = raw.Replace("\\u003d", "=", StringComparison.Ordinal);
-        raw = raw.Replace("\\u0026", "&", StringComparison.Ordinal);
-
         return raw;
     }
 
-    [GeneratedRegex(@"\[\s*""(?<pkg>[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z0-9_]+)+)""\s*,\s*7\s*\]", RegexOptions.Compiled)]
+    [GeneratedRegex(@"\[\s*(?:\\?"")(?<pkg>[A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z0-9_]+)+)(?:\\?"")\s*,\s*\d+\s*\]", RegexOptions.Compiled)]
     private static partial Regex PackageEntryRegex();
 
-    [GeneratedRegex(@"""(?<token>[A-Za-z0-9\+\/=_\-]{100,})""", RegexOptions.Compiled)]
+    [GeneratedRegex(@"""(?<token>[A-Za-z0-9\+\/=_\-]{80,})""", RegexOptions.Compiled)]
     private static partial Regex TokenRegex();
 
     [GeneratedRegex(@"(?m)^\s*\d+\s*$\r?\n?", RegexOptions.Compiled)]

@@ -20,11 +20,7 @@ public class PlayMarketOptions
 
     public HeaderOptions Headers { get; init; } = new();
 
-    public string FirstRequestTemplate { get; init; } = string.Empty;
-    public string NextRequestTemplate { get; init; } = string.Empty;
-
     public int DefaultLimit { get; init; } = 250;
-    public int MaxPages { get; init; } = 20;
 
     public sealed class HeaderOptions
     {

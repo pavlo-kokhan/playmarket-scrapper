@@ -17,13 +17,6 @@ public class PlayMarketController : ControllerBase
         _playMarketSearchValidator = playMarketSearchValidator;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> TestAsync(string keyword, string country, CancellationToken cancellationToken = default)
-    {
-        var result = await _playMarketSearchService.SearchFirstRowAsync(keyword, country, cancellationToken);
-        return Ok(result);
-    }
-
     [HttpGet("search-packages")]
     public async Task<IActionResult> SearchAsync(string keyword, string country, int limit, CancellationToken cancellationToken = default)
     {
