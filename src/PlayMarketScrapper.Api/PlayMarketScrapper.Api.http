@@ -1,0 +1,6 @@
+@PlayMarketScrapper.Api_HostAddress = http://localhost:5226
+
+GET {{PlayMarketScrapper.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
