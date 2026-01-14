@@ -13,8 +13,8 @@ public class PlayMarketOptions
     public string AuthUser { get; init; } = string.Empty;
     public string Rt { get; init; } = string.Empty;
 
-    public string RpcIdsFirst { get; init; } = string.Empty;
-    public string RpcIdsNext { get; init; } = string.Empty;
+    public string RpcIdSearch { get; init; } = string.Empty;
+    public string RpcIdPagination { get; init; } = string.Empty;
 
     public int TimeoutSeconds { get; init; } = 30;
 
@@ -24,8 +24,8 @@ public class PlayMarketOptions
 
     public sealed class HeaderOptions
     {
-        public string UserAgent { get; init; } = "Mozilla/5.0";
-        public string Accept { get; init; } = "*/*";
-        public string AcceptLanguage { get; init; } = "en-US,en;q=0.9";
+        public string UserAgent { get; init; } = string.Empty;
+        public string Accept { get; init; } = string.Empty;
+        public string AcceptLanguage { get; init; } = string.Empty;
     }
 }

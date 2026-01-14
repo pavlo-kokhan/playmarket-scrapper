@@ -12,7 +12,7 @@ builder
     .AddControllers()
     .Services
     .AddCors()
-    .AddScoped<IPlayMarketSearchService, PlayMarketSearchSearchService>()
+    .AddScoped<IPlayMarketSearchService, PlayMarketSearchService>()
     .AddSingleton<IPlayMarketResponseParser, PlayMarketResponseParser>()
     .AddSingleton<PlayMarketSearchValidator>()
     .AddPlayMarketHttpClient(builder.Configuration);

@@ -1,6 +1,6 @@
-@PlayMarketScrapper.Api_HostAddress = http://localhost:5226
+POST https://play.google.com/_/PlayEnterpriseWebStoreUi/data/batchexecute?source-path=/work/search&bl=boq_playenterprisewebuiserver_20251214.04_p0&hl=en&gl=US&authuser=0&rt=c
+Content-Type: application/x-www-form-urlencoded
 
-GET {{PlayMarketScrapper.Api_HostAddress}}/weatherforecast/
-Accept: application/json
 
-###
+f.req=[[["lGYRle","[[[null,null,null,null,[null,1]],[[10,[10,50]],null,null,[96,108,72,100,27,177,183,222,8,57,169,110,11,184,16,1,139,152,194,165,68,163,211,9,71,31,195,12,64,151,150,148,113,104,55,56,145,32,34,10,122]],[\"home\"],4,null,null,null,[null,1]]]",null,"1"]]]
+

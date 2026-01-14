@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Net;
+using Microsoft.Extensions.Options;
 using PlayMarketScrapper.Api.Application.Constants;
 using PlayMarketScrapper.Api.Application.Options;
 
@@ -12,7 +13,8 @@ public static class ServiceCollectionExtensions
             .AddOptions<PlayMarketOptions>()
             .Bind(configuration.GetSection(PlayMarketOptions.SectionName));
         
-        return services.AddHttpClient(HttpClientNames.PlayMarket, (sp, client) => 
+        return services
+            .AddHttpClient(HttpClientNames.PlayMarket, (sp, client) => 
             {
                 var options = sp.GetRequiredService<IOptions<PlayMarketOptions>>().Value;
                 
@@ -22,6 +24,11 @@ public static class ServiceCollectionExtensions
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(options.Headers.UserAgent);
                 client.DefaultRequestHeaders.Accept.ParseAdd(options.Headers.Accept);
                 client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(options.Headers.AcceptLanguage);
+            })
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
             })
         .Services;
     }
